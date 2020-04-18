@@ -1,0 +1,65 @@
+#include <stdio.h>
+#include <stdlib.h>
+int main(int argc, char *argv[]) {
+	while(1)
+	{
+		srand( time (NULL) );
+		int  x= rand()%10001, a, t=0;
+		//printf("%d",x);
+		int  bot=0, top=10000;
+		printf("please guess %d  to  %d      times %d\n", bot, top, t);
+		while(1)
+		{
+			scanf("%d",&a);
+			
+			if(x<=a) 
+			{	
+				if(x<a)
+				{
+					if(a>top)
+					{
+						printf("is over the limit\n");
+						printf("retry once again~~\n");
+						t=t;
+						printf("please guess %d 到 %d      times %d\n", bot, top, t);
+					 	
+						
+					}
+					else
+					{
+						top=a;
+						t=t+1;
+						printf("please guess %d to %d      times %d\n", bot, top, t);
+							
+					}
+				}
+				else
+				{
+					t=t+1;
+					printf("CONGRADUATION  you had guess %d times to the correct answer\n==============================", t);
+					break;
+				}
+			}
+			else
+			{
+				if(a<bot)
+				{
+					printf("the number is too little?!?\n");
+					printf("tries again\n");
+
+					printf("please guess %d to %d      times %d\n", bot, top, t);
+					t=t;		
+				}
+				else
+				{
+					bot=a;
+					t=t+1;
+					printf("please guess %d to %d      times %d\n", bot, top, t);
+					
+				}
+			}
+		}
+		break;	
+	}
+	return 0;
+}
