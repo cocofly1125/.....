@@ -1,0 +1,256 @@
+#include <iostream>
+#include <stdlib.h>
+#include <time.h>
+#include<conio.h>
+
+using namespace std;
+struct safe  //guan do u sian
+{
+	int x;
+	int y;
+};
+int main( int argc, char** argv ) {
+	struct safe bfs [81];
+	srand( time( NULL ));
+	int i, j, q ,x , ax, aax, y, ay, aay, d, end=0, ii, flag= 0, finish= 0 , bx, by; 
+	int bomb=0, bombx, bomby, head, tail;
+	char  a[10][10] , b[10][10], t='_', temp='#', box[10][10], next[8][2]={{1, 0}, {0, 1}, {-1, 0}, {0, -1}, { 1, 1}, { -1, 1}, { 1, -1}, { -1, -1}};             // map only
+	for( i=0; i<9; i++ )
+	{
+		for( j=0; j<9; j++ )
+		{
+			if( i==0 && j==0 )
+			{
+				a[j][i]='_';
+				b[i][j]= 48; 
+				cout<<a[j][i]<<"  ";
+				continue;
+			}
+			b[j][i]= 48;
+			a[j][i]= 35;         //#==35
+			cout<< a[j][i]<<"  ";
+		}	
+		cout<< endl<< endl;
+	}                            //map only
+	while( bomb != 10 )
+	{
+		ii += 7;
+		srand( time ( NULL ) + ii);
+		q= rand()% 81;
+		bombx= q / 9;
+		bomby= q % 9;
+		if( b[bomby][bombx] == 35 )  	//#=35
+				continue;
+		else
+		{
+			b[bomby][bombx]= 35; 
+			bomb++;
+			//cout<<"bomb is in : "<<" x= "<<bombx++<<" "<<" y= "<<bomby++<<" "<<endl;
+		}		
+	}
+	for ( i=0; i<9; i++ )
+		for ( j=0; j<9; j++ )
+		{	
+			if( b[i][j] == 35 )
+			{
+				for( x=-1; x<=1; x++ )
+					for( y=-1; y<=1; y++ )
+					{
+						if( x==0 && y==0 || b[i+y][j+x] == 35 )
+							continue;
+						else
+							b[i+y][j+x]++;
+					}		
+			}	
+		}
+	/*for (i=0; i<9; i++)
+	{
+		for (j=0; j<9; j++)
+		{
+			cout<<b[i][j]<<" ";
+		}
+		cout<<endl;
+	}*/
+	x=0; y=0;
+	a[y][x]= '_';
+	while( finish != 10 )
+	{
+		d= getch();
+		switch ( d )
+		{ 
+			case 122:  	//place flag
+				if( flag < 10 )
+				{
+					if( temp != '*' )
+					{
+						flag++;
+						if( temp != '#' )  	//number
+						{
+							flag--;
+							continue;
+						}
+						else
+						{
+							temp= '*';  	//#
+						}	
+					}
+					else
+					{
+						flag--;
+						temp= '#';
+					}
+				} 
+				else
+				{
+					if( temp == '*' )
+					{
+						temp= '#';
+						flag--;
+					}
+					else
+					{
+						cout<< "the flag is over the limit";
+						continue;	
+					}
+				}
+				
+			case 119: 	//w 
+				a[y][x]= temp;
+				temp= a[y-1][x];
+				system ( "cls" );
+				y--;
+				a[y][x]= '_';
+				break;
+				
+			case 97: 	//a 
+				a[y][x]= temp;
+				temp= a[y][x-1];
+				system( "cls" );
+				x--;
+				a[y][x]= '_';
+				break;
+				
+			case 115: 	//s 
+				a[y][x]= temp;
+				temp= a[y+1][x];
+				system( "cls" );
+				y++;
+				a[y][x]= '_';
+				break;
+				
+			case 100: 	//d
+				a[y][x]= temp;
+				temp= a[y][x+1];
+				system( "cls" );
+				x++;
+				a[y][x]= '_';
+				break;
+				
+			case 32: //space
+				switch( b[y][x] )
+				{
+					case 35:
+						end=1;
+						system( "cls" );
+						break;
+					
+					case 48:  	//0
+						tail=1;
+						head=1;
+						bfs[tail].x = x;
+						bfs[tail].y = y;
+						box[x][y] = 1;
+						tail++;
+						while( head < tail )
+						{
+							for( i=0; i<8; i++)
+							{
+								bx = bfs[head].x+ next[i][0];
+								by = bfs[head].y+ next[i][1];
+								if( bx < 0 || by < 0 || bx >9 || by > 9 )
+									continue;
+								if( a[by][bx] == '#' && box[by][bx] == 0  && b[by][bx] == '0' )
+								{
+									box [by][bx] = 1;
+									bfs[tail].x = bx;
+									bfs[tail].y = by;
+									a[by][bx] = '.';
+									tail++;
+								}
+								if( a[by][bx] == '#' && box[by][bx] == 0 && (b[by][bx] > '0' && b[by][bx] <= '9') ){
+									box [by][bx] = 1;
+									a[by][bx] = b[by][bx]; 
+						
+								}
+							}
+							head++;
+						}
+					a[y][x]= '.';
+					temp= a[y][x];
+					continue;
+					
+					case 49:  	// 1
+					a[y][x]= '1';
+					temp= a[y][x];
+					continue;
+					
+					case 50:  	// 2
+					a[y][x]= '2';
+					temp= a[y][x];
+					continue;
+					
+					case 51:  	// 3
+					a[y][x]= '3';
+					temp= a[y][x];
+					continue;
+					
+					case 52:  	//4
+					a[y][x]= '4';
+					temp= a[y][x];
+					continue;
+					
+					case 53:  	//4
+					a[y][x]= '5';
+					temp= a[y][x];
+					continue;
+						
+					case 54:  	//4
+					a[y][x]= '6';
+					temp= a[y][x];
+					continue;
+				}
+			break;
+		}	
+		if ( end == 1 )
+			cout<< " you lose ";
+		else
+		{
+			for( i=0; i<9;i++ )
+			{
+				for( j=0; j<9; j++ )
+					cout<<a[i][j]<< "  ";
+				cout<< endl<< endl;
+			}
+		}
+		finish= 0;
+		for( i=0; i<=9; i++ )
+			for( j=0; j<=9; j++ )
+			{
+				if( b[i][j] == 35 && a[i][j] == '*' ) 
+				{
+					finish++;
+					if( finish == 10 )
+						cout<<"you win";
+				} 
+			}
+		/*for (i=0; i<9; i++)
+		{
+			for (j=0; j<9; j++)
+			{
+				cout<<b[i][j]<<" ";
+			}
+			cout<<endl;
+		}*/
+	}
+	return 0;
+}
